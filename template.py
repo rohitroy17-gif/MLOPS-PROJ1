@@ -11,6 +11,14 @@ list_of_files=[
     "pyproject.toml",
     "requirements.txt",
     "demo.py"
+    #day2
+    f"{project_name}/entity/config_entity.py",
+    f"{project_name}/entity/artifact_entity.py",
+    f"{project_name}/configuration/mongo_db_connection.py",
+    f"{project_name}/data_access/proj1_data.py",
+    f"{project_name}/components/data_ingestion.py",
+    f"{project_name}/constants/__init__.py",
+    f"{project_name}/pipline/training_pipeline.py"
 ]
 
 for filepath in list_of_files:
