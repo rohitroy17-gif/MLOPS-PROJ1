@@ -19,6 +19,15 @@ list_of_files=[
     f"{project_name}/components/data_ingestion.py",
     f"{project_name}/constants/__init__.py",
     f"{project_name}/pipline/training_pipeline.py"
+    #day3
+    f"{project_name}/utils/__init__.py",
+    f"{project_name}/utils/main_utils.py",
+    f"{project_name}/components/data_validation.py",
+    f"{project_name}/components/data_transformation.py",
+    f"{project_name}/components/model_trainer.py",
+    f"{project_name}/entity/estimator.py",
+    "config/model.yaml",
+    "config/schema.yaml"
 ]
 
 for filepath in list_of_files:
