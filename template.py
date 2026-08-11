@@ -27,7 +27,14 @@ list_of_files=[
     f"{project_name}/components/model_trainer.py",
     f"{project_name}/entity/estimator.py",
     "config/model.yaml",
-    "config/schema.yaml"
+    "config/schema.yaml",
+    #day4
+    f"{project_name}/configuration/aws_connection.py",
+    f"{project_name}/cloud_storage/__init__.py",
+    f"{project_name}/cloud_storage/aws_storage.py",
+    f"{project_name}/entity/s3_estimator.py",
+    f"{project_name}/components/model_evaluation.py",
+    f"{project_name}/components/model_pusher.py"
 ]
 
 for filepath in list_of_files:
