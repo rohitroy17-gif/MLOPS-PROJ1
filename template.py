@@ -34,7 +34,10 @@ list_of_files=[
     f"{project_name}/cloud_storage/aws_storage.py",
     f"{project_name}/entity/s3_estimator.py",
     f"{project_name}/components/model_evaluation.py",
-    f"{project_name}/components/model_pusher.py"
+    f"{project_name}/components/model_pusher.py",
+    #day5
+    f"{project_name}/pipline/prediction_pipeline.py",
+    "app.py"
 ]
 
 for filepath in list_of_files:
