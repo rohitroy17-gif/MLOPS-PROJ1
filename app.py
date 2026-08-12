@@ -79,7 +79,7 @@ async def index(request: Request):
     Renders the main HTML form page for vehicle data input.
     """
     return templates.TemplateResponse(
-            "vehicledata.html",{"request": request, "context": "Rendering"})
+        request, "vehicledata.html", {"context": "Rendering"})
 
 # Route to trigger the model training process
 @app.get("/train")
@@ -133,9 +133,7 @@ async def predictRouteClient(request: Request):
 
         # Render the same HTML page with the prediction result
         return templates.TemplateResponse(
-            "vehicledata.html",
-            {"request": request, "context": status},
-        )
+            request, "vehicledata.html", {"context": status})
         
     except Exception as e:
         return {"status": False, "error": f"{e}"}
@@ -143,4 +141,3 @@ async def predictRouteClient(request: Request):
 # Main entry point to start the FastAPI server
 if __name__ == "__main__":
     app_run(app, host=APP_HOST, port=APP_PORT)
-
