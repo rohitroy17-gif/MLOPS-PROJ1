@@ -131,7 +131,11 @@ Welcome to this MLOps project, designed to demonstrate a robust pipeline for man
 
 ### Step 18: Final Steps
 1. Open the 5080 port on the EC2 instance.
+<<<<<<< HEAD
 2. Access the deployed app by visiting `http://54.210.219.23:5000/`.
+=======
+2. Access the deployed app by visiting `http://<public_ip>:5080`.
+>>>>>>> fcdd226 (readme added)
 
 ---
 
@@ -154,4 +158,8 @@ If you found this project helpful or have any questions, feel free to reach out!
 
 ---
 
+<<<<<<< HEAD
 This README provides a structured walkthrough of the MLOps project, showcasing the end-to-end pipeline, cloud integration, CI/CD setup, and robust data handling capabilities.
+=======
+This README provides a structured walkthrough of the MLOps project, showcasing the end-to-end pipeline, cloud integration, CI/CD setup, and robust data handling capabilities.
+>>>>>>> fcdd226 (readme added)
