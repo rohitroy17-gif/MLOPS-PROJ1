@@ -1,5 +1,3 @@
-from typing import Optional
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
@@ -7,21 +5,24 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from uvicorn import run as app_run
 
+from typing import Optional
+
+# Import project modules
 from src.constants import APP_HOST, APP_PORT
 from src.pipline.prediction_pipeline import VehicleData, VehicleDataClassifier
 from src.pipline.training_pipeline import TrainPipeline
 
 
-# ============================================================
-# Initialize FastAPI application
-# ============================================================
+# =========================================================
+# FastAPI Application
+# =========================================================
 
 app = FastAPI()
 
 
-# ============================================================
-# Static files
-# ============================================================
+# =========================================================
+# Static Files
+# =========================================================
 
 app.mount(
     "/static",
@@ -30,41 +31,40 @@ app.mount(
 )
 
 
-# ============================================================
+# =========================================================
 # Jinja2 Templates
-# ============================================================
+# =========================================================
 
 templates = Jinja2Templates(
     directory="templates"
 )
 
 
-# ============================================================
-# CORS Configuration
-# ============================================================
+# =========================================================
+# CORS
+# =========================================================
 
 origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# ============================================================
-# DataForm Class
-# ============================================================
+# =========================================================
+# Data Form
+# =========================================================
 
 class DataForm:
     """
-    Class to handle vehicle form data.
+    Class for receiving vehicle form data.
     """
 
-    def __init__(self, request: Request) -> None:
-
+    def __init__(self, request: Request):
         self.request: Request = request
 
         self.Gender: Optional[int] = None
@@ -79,7 +79,7 @@ class DataForm:
         self.Vehicle_Age_gt_2_Years: Optional[int] = None
         self.Vehicle_Damage_Yes: Optional[int] = None
 
-    async def get_vehicle_data(self) -> None:
+    async def get_vehicle_data(self):
         """
         Retrieve vehicle data from the submitted HTML form.
         """
@@ -105,33 +105,33 @@ class DataForm:
         )
 
 
-# ============================================================
-# Home Route
-# ============================================================
+# =========================================================
+# Home Page
+# =========================================================
 
 @app.get("/", tags=["authentication"])
 async def index(request: Request):
     """
-    Render the vehicle prediction HTML page.
+    Render the main vehicle prediction page.
     """
 
     return templates.TemplateResponse(
-        name="vehicledata.html",
-        context={
-            "request": request,
+        request,
+        "vehicledata.html",
+        {
             "context": "Rendering"
         }
     )
 
 
-# ============================================================
+# =========================================================
 # Training Route
-# ============================================================
+# =========================================================
 
 @app.get("/train")
 async def trainRouteClient():
     """
-    Start the model training pipeline.
+    Run the model training pipeline.
     """
 
     try:
@@ -141,103 +141,111 @@ async def trainRouteClient():
         train_pipeline.run_pipeline()
 
         return Response(
-            content="Training successful!!!",
-            media_type="text/plain"
+            content="Training successful!!!"
         )
 
     except Exception as e:
 
         return Response(
-            content=f"Error Occurred! {e}",
-            media_type="text/plain",
+            content=f"Error Occurred! {str(e)}",
             status_code=500
         )
 
 
-# ============================================================
+# =========================================================
 # Prediction Route
-# ============================================================
+# =========================================================
 
 @app.post("/")
 async def predictRouteClient(request: Request):
     """
-    Receive vehicle form data and make a prediction.
+    Receive vehicle data and make a prediction.
     """
 
     try:
 
-        # ----------------------------------------------------
+        # -------------------------------------------------
         # Get form data
-        # ----------------------------------------------------
+        # -------------------------------------------------
 
         form = DataForm(request)
 
         await form.get_vehicle_data()
 
 
-        # ----------------------------------------------------
+        # -------------------------------------------------
         # Create VehicleData object
-        # ----------------------------------------------------
+        # -------------------------------------------------
 
         vehicle_data = VehicleData(
+
             Gender=form.Gender,
+
             Age=form.Age,
+
             Driving_License=form.Driving_License,
+
             Region_Code=form.Region_Code,
+
             Previously_Insured=form.Previously_Insured,
+
             Annual_Premium=form.Annual_Premium,
+
             Policy_Sales_Channel=form.Policy_Sales_Channel,
+
             Vintage=form.Vintage,
+
             Vehicle_Age_lt_1_Year=form.Vehicle_Age_lt_1_Year,
+
             Vehicle_Age_gt_2_Years=form.Vehicle_Age_gt_2_Years,
+
             Vehicle_Damage_Yes=form.Vehicle_Damage_Yes
         )
 
 
-        # ----------------------------------------------------
-        # Convert input to DataFrame
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # Convert input into DataFrame
+        # -------------------------------------------------
 
         vehicle_df = (
             vehicle_data.get_vehicle_input_data_frame()
         )
 
 
-        # ----------------------------------------------------
-        # Initialize prediction pipeline
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # Load prediction pipeline
+        # -------------------------------------------------
 
         model_predictor = VehicleDataClassifier()
 
 
-        # ----------------------------------------------------
+        # -------------------------------------------------
         # Make prediction
-        # ----------------------------------------------------
+        # -------------------------------------------------
 
         value = model_predictor.predict(
             dataframe=vehicle_df
         )[0]
 
 
-        # ----------------------------------------------------
-        # Convert prediction to readable status
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # Convert prediction to readable result
+        # -------------------------------------------------
 
-        status = (
-            "Response-Yes"
-            if value == 1
-            else "Response-No"
-        )
+        if value == 1:
+            status = "Response-Yes"
+        else:
+            status = "Response-No"
 
 
-        # ----------------------------------------------------
-        # Render result
-        # ----------------------------------------------------
+        # -------------------------------------------------
+        # Render HTML page
+        # -------------------------------------------------
 
         return templates.TemplateResponse(
-            name="vehicledata.html",
-            context={
-                "request": request,
+            request,
+            "vehicledata.html",
+            {
                 "context": status
             }
         )
@@ -251,9 +259,9 @@ async def predictRouteClient(request: Request):
         }
 
 
-# ============================================================
+# =========================================================
 # Main
-# ============================================================
+# =========================================================
 
 if __name__ == "__main__":
 
