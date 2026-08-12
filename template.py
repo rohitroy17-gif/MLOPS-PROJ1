@@ -41,6 +41,7 @@ list_of_files=[
     #day6
     "Dockerfile",
     ".dockerignore"
+    #done
 ]
 
 for filepath in list_of_files:
