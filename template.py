@@ -37,7 +37,10 @@ list_of_files=[
     f"{project_name}/components/model_pusher.py",
     #day5
     f"{project_name}/pipline/prediction_pipeline.py",
-    "app.py"
+    "app.py",
+    #day6
+    "Dockerfile",
+    ".dockerignore"
 ]
 
 for filepath in list_of_files:
