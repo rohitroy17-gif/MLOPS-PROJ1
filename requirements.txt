@@ -17,6 +17,5 @@ fastapi
 python-multipart
 uvicorn
 jinja2
-python-dotenv
 imblearn
 -e .
